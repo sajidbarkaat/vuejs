@@ -37,6 +37,7 @@ export default {
   },
   methods: {
     fetchSurveys() {
+      this.results.splice(0, this.results.length)
       fetch(
         'https://vue-http-demo-39ae2-default-rtdb.firebaseio.com/SurveyResults.json'
       )
