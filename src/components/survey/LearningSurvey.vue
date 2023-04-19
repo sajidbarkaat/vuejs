@@ -50,15 +50,21 @@
 </template>
 
 <script>
+// import firebase from '../../firebase.js';
 export default {
   data() {
     return {
       enteredName: '',
       chosenRating: null,
       invalidInput: false,
+      newSurvey: {
+        id:null,
+        name: '',
+        rating: null,
+      },
     };
   },
-  emits: ['survey-submit'],
+
   methods: {
     submitSurvey() {
       if (this.enteredName === '' || !this.chosenRating) {
@@ -66,11 +72,26 @@ export default {
         return;
       }
       this.invalidInput = false;
-
-      this.$emit('survey-submit', {
-        userName: this.enteredName,
-        rating: this.chosenRating,
+      this.newSurvey.id = new Date().toISOString();
+      this.newSurvey.name = this.enteredName;
+      this.newSurvey.rating = this.chosenRating
+      fetch(
+        'https://vue-http-demo-39ae2-default-rtdb.firebaseio.com/SurveyResults.json',
+        {
+          
+          method: 'POST',
+          body: JSON.stringify(this.newSurvey)
+                    
+          
+        }
+      ).then(() => {
+        this.newSurvey.name = '';
+        this.newSurvey.rating = null;
       });
+      // this.$emit('survey-submit', {
+      //   userName: this.enteredName,
+      //   rating: this.chosenRating,
+      // });
 
       this.enteredName = '';
       this.chosenRating = null;
